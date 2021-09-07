@@ -1,0 +1,73 @@
+ 
+{% extends "dashboard/base.html" %}
+{% block content %}
+<script>
+function multiply()
+{
+  var numOne, numTwo=1, product,numThree,product2;
+  numOne = parseFloat(document.getElementById("avg_price").value);
+  numTwo = parseFloat(document.getElementById("qty").value);
+  numThree=parseFloat(document.getElementById("current_price").value);
+  if(document.getElementById("Buy_Sell").value==="Buy"){
+  console.log(document.getElementById("Buy_Sell").value)
+  product = numOne*numTwo;
+  product2=numThree*numTwo;
+  if (numOne && numTwo){
+    document.getElementById("invested_amount").value=" ";
+    document.getElementById("invested_amount").value = product.toFixed( 2 );
+  }
+  if (product === 'NaN'){
+    document.getElementById("invested_amount").value=" ";
+    document.getElementById("invested_amount").value = product.toFixed( 2 );
+  }
+
+  if (numThree && numTwo){
+    document.getElementById("current_value").value=" ";
+    document.getElementById("current_value").value = product2.toFixed( 2 );
+  }
+  if (product2 === 'NaN'){
+    document.getElementById("current_value").value=" ";
+    document.getElementById("current_value").value = product2.toFixed( 2 );
+  }
+  
+  var numFour=document.getElementById("current_value").value;
+  var numFive=document.getElementById("invested_amount").value,answer;
+  document.getElementById("Overall_Gain").value=(numFour-numFive).toFixed( 2 );
+}
+else{
+  var numFour=document.getElementById("current_value").value;
+  var numFive=document.getElementById("invested_amount").value,answer;
+  document.getElementById("Overall_Gain").value=(numFive-numFour).toFixed( 2 );
+}
+}
+</script>
+<h1>ADD STOCKS</h1>
+<form action="{% url 'search_stock' %}"class="d-flex" method="POST">
+    {% csrf_token %}
+    <input class="form-control mx-auto" type="search" placeholder="Search for stock" aria-label="Search" name="ticker">
+    <button class="btn btn-outline-secondary btn-default btn-md" type="submit">Search Stock</button>
+</form>
+
+<form action="{% url 'stock_insert' %} " method="post" autocomplete="off" >
+ {% csrf_token %}
+ <p><label for="id_date">Date:</label><input type="date" id="date" name="date"></p>
+ <p><label for="id_companyName">CompanyName:</label> <input type="text" id="companyName" name="companyName" maxlength="100" value="{{api.companyName}}"required id="companyName" readonly></p>
+ <p><label for="id_qty">Qty:</label> <input type="number" name="qty" value="0" required id="qty"  ></p>
+ <p><label for="id_avg_price">Avg price:</label> <input type="number" name="avg_price" value="0" required id="avg_price" ></p>
+ <p><label for="id_buy_sell">Buy/Sell
+  <select name="Buy_Sell" id="Buy_Sell"  onclick="multiply()">
+  <option value="Buy" >Buy</option>
+  <option value="Sell">Sell</option>
+</select></p>
+ <p><label for="id_invested_amount">Invested amount:</label> <input type="number" name="invested_amount" value="0" step="any" required id="invested_amount" readonly></p>
+ <p><label for="id_current_price">Current price:</label> <input type="number" name="current_price" value="{{api.latestPrice}}" step="any" required id="current_price" readonly></p>
+ <p><label for="Today_Gain"</p>Today's Gain:</label><input type="number" name="Today_Gain" value= "{{api.change}}"  step="any" required id="Today_Gain" readonly></p>
+ <p><label for="Overall Gain"</p>Overall Gain:</label><input type="number" name="Overall_Gain"  step="any" required id="Overall_Gain" readonly></p>
+ <p><label for="id_current_value">Current value:</label> <input type="number" name="current_value" value="0" step="any" required id="current_value" readonly></p>
+ 
+ <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+   Submit</button>
+</form>
+
+
+{% endblock content %}

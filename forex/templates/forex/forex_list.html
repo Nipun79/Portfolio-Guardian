@@ -1,0 +1,64 @@
+{% extends "dashboard/base.html" %}
+{% block content %}
+<h1>List Of forex</h1>
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td></td>
+            <td>Name</td>
+            <td>qty</td>
+            <td>avg_price</td>
+            <td>Amt. Invested</td>
+            <td>Current Price</td>
+            <td>Current Value</td>
+            <td>Overall  Gain/Loss</td>
+            <td>
+                <a href="{% url 'forex_insert' %}" class="btn btn-outline-success">
+                    <i class="fas fa-plus"></i> Add New
+                </a>
+            </td>
+        </tr>
+       
+    </thead>
+    <tbody>
+        {% for forex in forex_list %}
+            <tr>
+                <td></td>
+                <td>{{forex.Name}}</td>
+                <td>{{forex.qty}}</td>
+                <td>{{forex.avg_price}}</td>
+                <td>{{forex.invested_amount}}</td>
+                <td>{{forex.current_price}}</td>
+                <td>{{forex.current_value}}</td>
+                <td>{{forex.Overall_Gain}}</td>
+                <td>
+                    <a href="{% url 'forex_edit' forex.id %}" class="btn text-secondary px-0">
+                        <i class="far fa-edit fa-lg"></i>
+                    </a>
+                    <form action="{% url 'forex_delete' forex.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">
+                            <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+    <tfoot >
+        <tfoot style="vertical-align:bottom" >
+        <tr style="height:300px">
+        <th scope="row">Total </th>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{total_investment.current_value__sum}}</td>
+        <td>{{Overall_Gain.Overall_Gain__sum}}</td>
+    </tr>
+    </tfoot>
+</table>
+
+{% endblock content %}
